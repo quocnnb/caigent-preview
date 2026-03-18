@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avatar Animation — Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #09090b;
+  --surface: #131316;
+  --surface2: #1c1c21;
+  --border: rgba(255,255,255,0.06);
+  --t1: #f4f4f5;
+  --t2: #a1a1aa;
+  --t3: #52525b;
+  --accent: #a78bfa;
+  --font: 'DM Sans', -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--t1); font-family: var(--font); line-height: 1.6; }
+
+.page { max-width: 920px; margin: 0 auto; padding: 48px 24px 80px; }
+
+header { margin-bottom: 48px; }
+header h1 { font-size: 28px; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 6px; }
+header p { font-size: 14px; color: var(--t2); }
+header .tags { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
+header .tag { font-size: 11px; font-family: var(--mono); color: var(--t3); background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 3px 8px; }
+
+.section { margin-bottom: 48px; }
+.section-title { font-size: 13px; font-weight: 500; color: var(--t3); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+
+/* ===== PREVIEW GRID ===== */
+.preview-row { display: flex; gap: 12px; margin-bottom: 12px; }
+.mode-label { writing-mode: vertical-lr; transform: rotate(180deg); font-size: 11px; font-weight: 500; color: var(--t3); letter-spacing: 0.5px; text-transform: uppercase; display: flex; align-items: center; justify-content: center; width: 24px; flex-shrink: 0; }
+.preview-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; flex: 1; }
+.state-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 8px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.state-name { font-size: 12px; font-weight: 500; color: var(--t2); }
+.state-event { font-size: 10px; font-family: var(--mono); color: var(--t3); background: var(--surface2); border-radius: 3px; padding: 2px 6px; }
+.state-desc { font-size: 10px; color: var(--t3); text-align: center; line-height: 1.4; max-width: 100px; }
+
+/* ===== AVATAR ===== */
+.aw { position: relative; display: flex; align-items: center; justify-content: center; }
+.aw-sm { width: 88px; height: 88px; }
+.aw-lg { width: 130px; height: 130px; }
+.av { border-radius: 50%; position: relative; z-index: 3; overflow: hidden; background: #1a1a1a; }
+.av img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.av-sm { width: 56px; height: 56px; }
+.av-lg { width: 86px; height: 86px; }
+.ring { position: absolute; top: 50%; left: 50%; border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; }
+
+/* Idle */
+.idle .av { animation: idleAv 4s ease-in-out infinite; }
+@keyframes idleAv { 0%,100% { transform: scale(1); } 50% { transform: scale(0.98); } }
+.idle-r { border: 1px solid rgba(255,255,255,0.15); z-index: 1; }
+.ir1s { width: 66px; height: 66px; animation: idleR 4s ease-in-out infinite; }
+.ir2s { width: 76px; height: 76px; animation: idleR 4s ease-in-out infinite .7s; }
+.ir1l { width: 98px; height: 98px; animation: idleR 4s ease-in-out infinite; }
+.ir2l { width: 112px; height: 112px; animation: idleR 4s ease-in-out infinite .7s; }
+@keyframes idleR { 0%,100% { transform: translate(-50%,-50%) scale(1); opacity: .4; } 50% { transform: translate(-50%,-50%) scale(1.06); opacity: .1; } }
+
+/* Listening */
+.listening .av { animation: listenAv 2.6s cubic-bezier(.85,0,.25,1) infinite; }
+@keyframes listenAv { 0% { transform: scale(.96); } 18% { transform: scale(.92); } 68% { transform: scale(.92); } 100% { transform: scale(.96); } }
+.listen-rip { border: 1px solid rgba(255,255,255,.22); z-index: 1; opacity: 0; }
+.lrs { width: 50px; height: 50px; }
+.lrl { width: 76px; height: 76px; }
+.listen-rip.r1s { animation: ripInS 2.6s cubic-bezier(.6,0,.15,1) infinite; }
+.listen-rip.r2s { animation: ripInS 2.6s cubic-bezier(.6,0,.15,1) infinite .65s; }
+.listen-rip.r3s { animation: ripInS 2.6s cubic-bezier(.6,0,.15,1) infinite 1.3s; }
+.listen-rip.r1l { animation: ripInL 2.6s cubic-bezier(.6,0,.15,1) infinite; }
+.listen-rip.r2l { animation: ripInL 2.6s cubic-bezier(.6,0,.15,1) infinite .65s; }
+.listen-rip.r3l { animation: ripInL 2.6s cubic-bezier(.6,0,.15,1) infinite 1.3s; }
+@keyframes ripInS { 0% { transform: translate(-50%,-50%) scale(1.5); opacity: 0; } 10% { opacity: .4; } 80% { opacity: .12; } 100% { transform: translate(-50%,-50%) scale(1); opacity: 0; } }
+@keyframes ripInL { 0% { transform: translate(-50%,-50%) scale(1.45); opacity: 0; } 10% { opacity: .4; } 80% { opacity: .12; } 100% { transform: translate(-50%,-50%) scale(1); opacity: 0; } }
+
+/* Thinking */
+.thinking .av { animation: thinkAv 3s ease-in-out infinite; }
+@keyframes thinkAv { 0%,100% { transform: scale(.88); } 50% { transform: scale(.92); } }
+.orbit-wrap { position: absolute; top: 50%; left: 50%; width: 0; height: 0; z-index: 2; }
+.od { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,.4); transform: translate(-50%,-50%); }
+@keyframes dotFade { 0%,100% { opacity: .12; transform: translate(-50%,-50%) scale(.7); } 50% { opacity: .85; transform: translate(-50%,-50%) scale(1.15); } }
+@keyframes orbitSpin { 0% { transform: translate(-50%,-50%) rotate(0deg); } 100% { transform: translate(-50%,-50%) rotate(360deg); } }
+
+/* Speaking */
+.speaking .av { animation: speakAv 2.8s ease-in-out infinite; }
+@keyframes speakAv { 0% { transform: scale(1); } 7% { transform: scale(1.08); } 16% { transform: scale(1.03); } 24% { transform: scale(1.11); } 33% { transform: scale(1.04); } 40% { transform: scale(1.09); } 50% { transform: scale(1.02); } 58% { transform: scale(1.1); } 66% { transform: scale(1.05); } 75% { transform: scale(1.07); } 84% { transform: scale(1.02); } 92% { transform: scale(1.06); } 100% { transform: scale(1); } }
+.speak-rip { border: 1px solid rgba(255,255,255,.3); z-index: 1; opacity: 0; }
+.srs { width: 64px; height: 64px; }
+.srl { width: 94px; height: 94px; }
+.speak-rip.sr1 { animation: ripOut 1.4s ease-out infinite; }
+.speak-rip.sr2 { animation: ripOut 1.4s ease-out infinite .35s; }
+.speak-rip.sr3 { animation: ripOut 1.4s ease-out infinite .7s; }
+.speak-rip.sl1 { animation: ripOutL 1.4s ease-out infinite; }
+.speak-rip.sl2 { animation: ripOutL 1.4s ease-out infinite .35s; }
+.speak-rip.sl3 { animation: ripOutL 1.4s ease-out infinite .7s; }
+@keyframes ripOut { 0% { transform: translate(-50%,-50%) scale(1); opacity: .5; } 100% { transform: translate(-50%,-50%) scale(1.55); opacity: 0; } }
+@keyframes ripOutL { 0% { transform: translate(-50%,-50%) scale(1); opacity: .5; } 100% { transform: translate(-50%,-50%) scale(1.45); opacity: 0; } }
+
+/* ===== SCALE BAR ===== */
+.scale-bar { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 16px 0 0; flex-wrap: wrap; }
+.sb { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--t3); }
+.sb-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--t3); }
+.sb.active .sb-dot { background: var(--t1); }
+.sb.active { color: var(--t1); font-weight: 500; }
+.sb-arrow { font-size: 9px; color: var(--t3); }
+
+/* ===== SPEC TABLE ===== */
+.spec-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.spec-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+.spec-card h3 { font-size: 14px; font-weight: 500; margin-bottom: 10px; color: var(--t1); }
+.spec-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+.spec-row:last-child { border: none; }
+.spec-key { color: var(--t3); }
+.spec-val { color: var(--t2); font-family: var(--mono); font-size: 11px; text-align: right; }
+
+/* ===== STATE FLOW ===== */
+.flow { display: flex; align-items: center; justify-content: center; gap: 0; padding: 8px 0; flex-wrap: wrap; }
+.flow-node { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; font-size: 12px; font-weight: 500; text-align: center; }
+.flow-edge { display: flex; flex-direction: column; align-items: center; padding: 0 4px; }
+.flow-arrow { font-size: 14px; color: var(--t3); }
+.flow-label { font-size: 9px; font-family: var(--mono); color: var(--t3); max-width: 80px; text-align: center; line-height: 1.2; }
+
+/* Footer */
+.footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 11px; color: var(--t3); display: flex; justify-content: space-between; }
+
+@media (max-width: 640px) {
+  .preview-grid { grid-template-columns: repeat(2, 1fr); }
+  .spec-grid { grid-template-columns: 1fr; }
+  .mode-label { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <h1>Avatar State Animation</h1>
+  <p>Live preview — 4 states, 2 modes, neutral palette</p>
+  <div class="tags">
+    <span class="tag">Flutter</span>
+    <span class="tag">Millis AI SDK</span>
+    <span class="tag">CAIGent App</span>
+  </div>
+</header>
+
+<!-- STATE FLOW -->
+<div class="section">
+  <div class="section-title">State flow</div>
+  <div class="flow">
+    <div class="flow-node">Idle</div>
+    <div class="flow-edge"><span class="flow-arrow">→</span><span class="flow-label">ontranscript</span></div>
+    <div class="flow-node">Listening</div>
+    <div class="flow-edge"><span class="flow-arrow">→</span><span class="flow-label">500ms debounce</span></div>
+    <div class="flow-node">Thinking</div>
+    <div class="flow-edge"><span class="flow-arrow">→</span><span class="flow-label">onaudio</span></div>
+    <div class="flow-node">Speaking</div>
+    <div class="flow-edge"><span class="flow-arrow">→</span><span class="flow-label">audio ends</span></div>
+    <div class="flow-node">Idle</div>
+  </div>
+</div>
+
+<!-- LIVE PREVIEW -->
+<div class="section">
+  <div class="section-title">Live preview</div>
+
+  <!-- Chat mode -->
+  <div class="preview-row">
+    <div class="mode-label">Chat</div>
+    <div class="preview-grid">
+      <div class="state-card">
+        <div class="state-name">Idle</div>
+        <div class="aw aw-sm idle">
+          <div class="ring idle-r ir1s"></div>
+          <div class="ring idle-r ir2s"></div>
+          <div class="av av-sm"><img class="ava" alt=""></div>
+        </div>
+        <div class="state-event">onready</div>
+      </div>
+      <div class="state-card">
+        <div class="state-name">Listening</div>
+        <div class="aw aw-sm listening">
+          <div class="ring listen-rip r1s lrs"></div>
+          <div class="ring listen-rip r2s lrs"></div>
+          <div class="ring listen-rip r3s lrs"></div>
+          <div class="av av-sm"><img class="ava" alt=""></div>
+        </div>
+        <div class="state-event">ontranscript</div>
+      </div>
+      <div class="state-card">
+        <div class="state-name">Thinking</div>
+        <div class="aw aw-sm thinking">
+          <div class="orbit-wrap" id="os"></div>
+          <div class="av av-sm"><img class="ava" alt=""></div>
+        </div>
+        <div class="state-event">gap → onaudio</div>
+      </div>
+      <div class="state-card">
+        <div class="state-name">Speaking</div>
+        <div class="aw aw-sm speaking">
+          <div class="ring speak-rip sr1 srs"></div>
+          <div class="ring speak-rip sr2 srs"></div>
+          <div class="ring speak-rip sr3 srs"></div>
+          <div class="av av-sm"><img class="ava" alt=""></div>
+        </div>
+        <div class="state-event">onaudio</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Voice mode -->
+  <div class="preview-row">
+    <div class="mode-label">Voice</div>
+    <div class="preview-grid">
+      <div class="state-card">
+        <div class="state-name">Idle</div>
+        <div class="aw aw-lg idle">
+          <div class="ring idle-r ir1l"></div>
+          <div class="ring idle-r ir2l"></div>
+          <div class="av av-lg"><img class="ava" alt=""></div>
+        </div>
+      </div>
+      <div class="state-card">
+        <div class="state-name">Listening</div>
+        <div class="aw aw-lg listening">
+          <div class="ring listen-rip r1l lrl"></div>
+          <div class="ring listen-rip r2l lrl"></div>
+          <div class="ring listen-rip r3l lrl"></div>
+          <div class="av av-lg"><img class="ava" alt=""></div>
+        </div>
+      </div>
+      <div class="state-card">
+        <div class="state-name">Thinking</div>
+        <div class="aw aw-lg thinking">
+          <div class="orbit-wrap" id="ol"></div>
+          <div class="av av-lg"><img class="ava" alt=""></div>
+        </div>
+      </div>
+      <div class="state-card">
+        <div class="state-name">Speaking</div>
+        <div class="aw aw-lg speaking">
+          <div class="ring speak-rip sl1 srl"></div>
+          <div class="ring speak-rip sl2 srl"></div>
+          <div class="ring speak-rip sl3 srl"></div>
+          <div class="av av-lg"><img class="ava" alt=""></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scale-bar">
+    <div class="sb"><div class="sb-dot" style="width:5px;height:5px;"></div> Thinking 0.88</div>
+    <div class="sb-arrow">→</div>
+    <div class="sb"><div class="sb-dot" style="width:6px;height:6px;"></div> Listening 0.92</div>
+    <div class="sb-arrow">→</div>
+    <div class="sb active"><div class="sb-dot"></div> Idle 1.0</div>
+    <div class="sb-arrow">→</div>
+    <div class="sb"><div class="sb-dot" style="width:9px;height:9px;"></div> Speaking 1.11</div>
+  </div>
+</div>
+
+<!-- SPECS -->
+<div class="section">
+  <div class="section-title">Specs</div>
+  <div class="spec-grid">
+    <div class="spec-card">
+      <h3>Idle</h3>
+      <div class="spec-row"><span class="spec-key">Scale</span><span class="spec-val">0.98 ↔ 1.0</span></div>
+      <div class="spec-row"><span class="spec-key">Duration</span><span class="spec-val">4000ms</span></div>
+      <div class="spec-row"><span class="spec-key">Easing</span><span class="spec-val">ease-in-out</span></div>
+      <div class="spec-row"><span class="spec-key">Rings</span><span class="spec-val">2, stagger 700ms</span></div>
+      <div class="spec-row"><span class="spec-key">Ring opacity</span><span class="spec-val">0.4 → 0.1</span></div>
+    </div>
+    <div class="spec-card">
+      <h3>Listening</h3>
+      <div class="spec-row"><span class="spec-key">Scale</span><span class="spec-val">0.92 ↔ 0.96</span></div>
+      <div class="spec-row"><span class="spec-key">Duration</span><span class="spec-val">2600ms</span></div>
+      <div class="spec-row"><span class="spec-key">Easing</span><span class="spec-val">cubic(0.85,0,0.25,1)</span></div>
+      <div class="spec-row"><span class="spec-key">Hold</span><span class="spec-val">50% at 0.92</span></div>
+      <div class="spec-row"><span class="spec-key">Rings</span><span class="spec-val">3 inward, stagger 650ms</span></div>
+    </div>
+    <div class="spec-card">
+      <h3>Thinking</h3>
+      <div class="spec-row"><span class="spec-key">Scale</span><span class="spec-val">0.88 ↔ 0.92</span></div>
+      <div class="spec-row"><span class="spec-key">Duration</span><span class="spec-val">3000ms</span></div>
+      <div class="spec-row"><span class="spec-key">Dots</span><span class="spec-val">24 / 32</span></div>
+      <div class="spec-row"><span class="spec-key">Dot size</span><span class="spec-val">4px, white@40%</span></div>
+      <div class="spec-row"><span class="spec-key">Orbit</span><span class="spec-val">r31/49px, 4000ms</span></div>
+    </div>
+    <div class="spec-card">
+      <h3>Speaking</h3>
+      <div class="spec-row"><span class="spec-key">Scale</span><span class="spec-val">1.0 ↔ 1.11</span></div>
+      <div class="spec-row"><span class="spec-key">Duration</span><span class="spec-val">2800ms</span></div>
+      <div class="spec-row"><span class="spec-key">Rhythm</span><span class="spec-val">12 keyframes</span></div>
+      <div class="spec-row"><span class="spec-key">Rings</span><span class="spec-val">3 outward, stagger 350ms</span></div>
+      <div class="spec-row"><span class="spec-key">Ring scale</span><span class="spec-val">1 → 1.55</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <span>CAIGent · Avatar Animation Spec</span>
+  <span>March 2026</span>
+</div>
+
+</div>
+
+<script>
+// Avatar image
+var src="data:image/jpeg;base64,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";
+document.querySelectorAll('.ava').forEach(function(el){el.src=src;});
+
+// Thinking dots
+function dots(c,n,r){
+  c.style.cssText='left:50%;top:50%;transform:translate(-50%,-50%);animation:orbitSpin 4s linear infinite;position:absolute;width:0;height:0;';
+  for(var i=0;i<n;i++){
+    var d=document.createElement('div');d.className='od';
+    var a=(i/n)*2*Math.PI;
+    d.style.left=(Math.cos(a)*r)+'px';
+    d.style.top=(Math.sin(a)*r)+'px';
+    d.style.animation='dotFade 3s ease-in-out infinite '+((i/n)*3).toFixed(2)+'s';
+    c.appendChild(d);
+  }
+}
+dots(document.getElementById('os'),24,31);
+dots(document.getElementById('ol'),32,46);
+</script>
+</body>
+</html>
